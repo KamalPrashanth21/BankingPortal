@@ -26,6 +26,7 @@ public class CustomUserDetails implements UserDetails {
         return List.of(new SimpleGrantedAuthority("ROLE_"+role)); //since spring defaults to ROLE_ prefix
     }
 
+    public @Nullable User getUser(){ return this.user;}
     @Override
     public @Nullable String getPassword() {
         return user.getPassword();

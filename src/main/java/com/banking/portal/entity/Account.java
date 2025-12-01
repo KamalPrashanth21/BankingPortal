@@ -1,10 +1,13 @@
 package com.banking.portal.entity;
 
+import com.banking.portal.enums.AccountStatus;
+import com.banking.portal.enums.AccountType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -24,15 +27,29 @@ public class Account {
     private String accountNumber;
 
     @Column(nullable = false)
-    private BigDecimal balance = BigDecimal.ZERO;
+    private BigDecimal balance;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String status = "ACTIVE";
+    private AccountStatus status;
 
-    private LocalDateTime createdAt = LocalDateTime.now();
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AccountType accountType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
+    public Account(String accountNumber, BigDecimal balance, AccountStatus status, LocalDateTime createdAt,AccountType accountType, User user){
+        this.accountNumber=accountNumber;
+        this.balance=balance;
+        this.status=status;
+        this.createdAt=createdAt;
+        this.accountType=accountType;
+        this.user=user;
+    }
 }

@@ -5,9 +5,10 @@ import com.banking.portal.dto.AuthResponseDTO;
 import com.banking.portal.dto.LoginRequestDTO;
 import com.banking.portal.dto.RegisterRequestDTO;
 import com.banking.portal.entity.User;
+import com.banking.portal.exception.EmailAlreadyExistsException;
+import com.banking.portal.exception.UsernameAlreadyExistsException;
 import com.banking.portal.repository.UserRepository;
 import com.banking.portal.security.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,10 +45,10 @@ public class AuthService {
 
     public User registerUser(RegisterRequestDTO registerRequestDTO){
             if(userRepository.existsByUsername(registerRequestDTO.getUsername())){
-                throw new IllegalArgumentException("Username already exists!");
+                throw new UsernameAlreadyExistsException("Username already exists!");
             }
             if(userRepository.existsByEmail(registerRequestDTO.getEmail())){
-                throw new IllegalArgumentException("Email already exists!");
+                throw new EmailAlreadyExistsException("Email already exists!");
             }
             //now this means that the current user is a new user
         User userEntity = userMapper.userDTOtoUser(registerRequestDTO); //converted into a user entity

@@ -14,6 +14,12 @@ public class RegisterRequestDTO {
     public String password;
 
     @NonNull
+    public String firstName;
+
+    @NonNull
+    public String lastName;
+
+    @NonNull
     @Email
     public String email;
 

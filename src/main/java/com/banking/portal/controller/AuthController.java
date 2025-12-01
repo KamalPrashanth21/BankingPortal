@@ -27,14 +27,9 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<@NotNull String> UserRegistration(@Valid @RequestBody RegisterRequestDTO registerRequestDTO){ //need to return a responseEntity incase of errors.
-        try{
-            User user = authService.registerUser(registerRequestDTO);
-            return new ResponseEntity<>("User is registered successfully! Welcome, "+user.getUsername(), HttpStatus.OK);
-        }
-        catch(Exception ex){
-            return new ResponseEntity<>("An exception has occurred!"+ex.getMessage(),HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<@NotNull String> UserRegistration(@Valid @RequestBody RegisterRequestDTO registerRequestDTO) { //need to return a responseEntity incase of errors.
+        User user = authService.registerUser(registerRequestDTO);
+        return new ResponseEntity<>("User is registered successfully! Welcome, " + user.getUsername()+ " . "+user, HttpStatus.OK);
     }
 
     @PostMapping("/login")
