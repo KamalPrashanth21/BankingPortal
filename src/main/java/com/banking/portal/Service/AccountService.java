@@ -9,6 +9,10 @@ import com.banking.portal.enums.AccountType;
 import com.banking.portal.exception.ResourceNotFoundException;
 import com.banking.portal.repository.AccountRepository;
 import com.banking.portal.repository.UserRepository;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -49,6 +53,13 @@ public class AccountService {
         return listOfUserAccounts.stream()
                 .map(accountMapper::accountToAccountResponseDTO)
                 .toList();
+    }
+
+    public Page<@NotNull AccountResponseDTO> getUserAccounts(String username, int page, int size){
+        User user = userRepository.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("User doesn't exist!"));
+        Pageable pageable = PageRequest.of(page,size);
+        Page<Account> pg = accountRepository.findByUser(user, pageable);
+        return pg.map(accountMapper::accountToAccountResponseDTO);
     }
 
     public AccountResponseDTO getAccount(String username, String accountId){

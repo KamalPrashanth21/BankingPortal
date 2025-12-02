@@ -39,6 +39,25 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponseDTO,HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(AccessForbiddenException.class)
+    public ResponseEntity<@NotNull ErrorResponseDTO> unauthorizedAccessException(AccessForbiddenException ex,HttpServletRequest http){
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO("UNAUTHORIZED_ACCESS", ex.getMessage(), http.getRequestURI(), LocalDateTime.now());
+        return new ResponseEntity<>(errorResponseDTO,HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(AccountInactiveException.class)
+    public ResponseEntity<@NotNull ErrorResponseDTO> accountInactiveException(AccountInactiveException ex,HttpServletRequest http){
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO("INACTIVE_ACCOUNT", ex.getMessage(), http.getRequestURI(), LocalDateTime.now());
+        return new ResponseEntity<>(errorResponseDTO,HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(InsufficientBalanceException.class)
+    public ResponseEntity<@NotNull ErrorResponseDTO> insufficientBalanceException(InsufficientBalanceException ex,HttpServletRequest http){
+        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO("INSUFFICIENT_BALANCE", ex.getMessage(), http.getRequestURI(), LocalDateTime.now());
+        return new ResponseEntity<>(errorResponseDTO,HttpStatus.BAD_REQUEST);
+    }
+
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<@NotNull ErrorResponseDTO> generalException(Exception ex, HttpServletRequest http){
         ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO("INTERNAL_SERVER_ERROR", ex.getMessage(), http.getRequestURI(), LocalDateTime.now());
