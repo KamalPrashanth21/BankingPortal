@@ -19,13 +19,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Transaction {
 
-    public Transaction(TransactionType transactionType, BigDecimal amount, String description, LocalDateTime timestamp, Account account){
-        this.transactionType=transactionType;
-        this.amount=amount;
-        this.description=description;
-        this.timestamp=timestamp;
-        this.account=account;
-    }
+//    public Transaction(TransactionType transactionType, BigDecimal amount, String description, LocalDateTime timestamp, Account account){
+//        this.transactionType=transactionType;
+//        this.amount=amount;
+//        this.description=description;
+//        this.timestamp=timestamp;
+//        this.account=account;
+//    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

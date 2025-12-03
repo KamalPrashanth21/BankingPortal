@@ -37,7 +37,7 @@ public class AccountService {
 
         User user = userRepository.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("User doesn't exist!"));
 
-        Account account = new Account(generateAccountNumber(), BigDecimal.ZERO, AccountStatus.ACTIVE, LocalDateTime.now(), AccountType.SAVINGS, user);
+        Account account = new Account(null, generateAccountNumber(), BigDecimal.ZERO, AccountStatus.ACTIVE, LocalDateTime.now(), AccountType.SAVINGS, user);
         Account acc = accountRepository.save(account);
         return accountMapper.accountToAccountResponseDTO(acc);
     }
@@ -62,6 +62,15 @@ public class AccountService {
         return pg.map(accountMapper::accountToAccountResponseDTO);
     }
 
+
+    public @NotNull List<AccountResponseDTO> getUserAccountsByStatus(String username, AccountStatus status) {
+        User user = userRepository.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("User doesn't exist!"));
+        List<Account> accountList = accountRepository.findByStatus(status);
+        return accountList.stream()
+                .map(accountMapper::accountToAccountResponseDTO)
+                .toList();
+    }
+
     public AccountResponseDTO getAccount(String username, String accountId){
         User user = userRepository.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("User doesn't exist!"));
         Account account = accountRepository.findByAccountNumber(accountId).orElseThrow(()->new ResourceNotFoundException("Account doesn't exist!"));
@@ -73,7 +82,6 @@ public class AccountService {
         String randomNumber = UUID.randomUUID().toString();
         return randomNumber.substring(0,10).toUpperCase();
     }
-
 
 
 }

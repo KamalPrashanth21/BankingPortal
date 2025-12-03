@@ -3,6 +3,7 @@ package com.banking.portal.controller;
 
 import com.banking.portal.Service.AccountService;
 import com.banking.portal.dto.AccountResponseDTO;
+import com.banking.portal.enums.AccountStatus;
 import com.banking.portal.security.CustomUserDetails;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/accounts")
@@ -31,10 +33,16 @@ public class AccountController {
         return new ResponseEntity<>(accountResponseDTO, HttpStatus.OK);
     }
 
-    @GetMapping("/userAccounts")
+    @GetMapping("/userAccounts") //retrieves the accounts of the current user
     public ResponseEntity<@NotNull List<AccountResponseDTO>> getUserAccounts(@AuthenticationPrincipal CustomUserDetails userDetails){
         String username = userDetails.getUsername();
         return new ResponseEntity<>(accountService.getUserAccounts(username),HttpStatus.OK);
+    }
+
+    @GetMapping("/userAccounts/status")
+    public ResponseEntity<@NotNull List<AccountResponseDTO>> getUserAccountsByStatus(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestParam AccountStatus status){
+        String username= userDetails.getUsername();
+        return new ResponseEntity<>(accountService.getUserAccountsByStatus(username,status),HttpStatus.OK);
     }
 
     @GetMapping("/pagedUserAccounts")

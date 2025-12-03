@@ -44,12 +44,12 @@ public class Account {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Account(String accountNumber, BigDecimal balance, AccountStatus status, LocalDateTime createdAt,AccountType accountType, User user){
-        this.accountNumber=accountNumber;
-        this.balance=balance;
-        this.status=status;
-        this.createdAt=createdAt;
-        this.accountType=accountType;
-        this.user=user;
-    }
+//    public Account(String accountNumber, BigDecimal balance, AccountStatus status, LocalDateTime createdAt,AccountType accountType, User user){
+//        this.accountNumber=accountNumber;
+//        this.balance=balance;
+//        this.status=status;
+//        this.createdAt=createdAt;
+//        this.accountType=accountType;
+//        this.user=user;
+//    }
 }

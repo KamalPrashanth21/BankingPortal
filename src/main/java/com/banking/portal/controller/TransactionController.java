@@ -15,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/transactions")
@@ -52,15 +53,15 @@ import java.util.List;
     }
 
     @GetMapping("/getPagedTransactions/{accountNumber}")
-    public ResponseEntity<@NotNull Page<TransactionResponseDTO>> getPageableTransactions(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable String accountNumber, @RequestParam(defaultValue = "0")int page, @RequestParam(defaultValue = "5")int size){
-        Page<TransactionResponseDTO> transactionResponseDTO = transactionService.getPageableTransactions(userDetails.getUsername(), accountNumber,page,size);
+    public ResponseEntity<@NotNull Page<@NotNull TransactionResponseDTO>> getPageableTransactions(@AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable String accountNumber, @RequestParam(defaultValue = "0")int page, @RequestParam(defaultValue = "5")int size){
+        Page<@NotNull TransactionResponseDTO> transactionResponseDTO = transactionService.getPageableTransactions(userDetails.getUsername(), accountNumber,page,size);
         return new ResponseEntity<>(transactionResponseDTO,HttpStatus.OK);
     }
 
     @PostMapping("/transfer")
-    public ResponseEntity<@NotNull String> transfer(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody TransferRequestDTO transferRequestDTO){
+    public ResponseEntity<@NotNull Map<String,Object>> transfer(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody TransferRequestDTO transferRequestDTO){
         TransferResponseDTO transferResponseDTO = transactionService.transfer(userDetails.getUsername(), transferRequestDTO.getFromAccountNumber(),transferRequestDTO.getToAccountNumber(),transferRequestDTO.getAmount(),transferRequestDTO.getDescription());
-        return new ResponseEntity<>("Congrats! You're fund transfer transaction is successful! "+ transferResponseDTO,HttpStatus.OK);
+        return new ResponseEntity<>(Map.of("message","Congrats! Your fund transfer transaction is successful! ","transaction",transferResponseDTO),HttpStatus.OK);
     }
 
 }

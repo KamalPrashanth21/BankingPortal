@@ -4,6 +4,7 @@ import com.banking.portal.Service.AuthService;
 import com.banking.portal.dto.AuthResponseDTO;
 import com.banking.portal.dto.LoginRequestDTO;
 import com.banking.portal.dto.RegisterRequestDTO;
+import com.banking.portal.dto.RegisterResponseDTO;
 import com.banking.portal.entity.User;
 import jakarta.validation.Valid;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/auth")
@@ -27,9 +31,9 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<@NotNull String> UserRegistration(@Valid @RequestBody RegisterRequestDTO registerRequestDTO) { //need to return a responseEntity incase of errors.
-        User user = authService.registerUser(registerRequestDTO);
-        return new ResponseEntity<>("User is registered successfully! Welcome, " + user.getUsername()+ " . "+user, HttpStatus.OK);
+    public ResponseEntity<@NotNull Map<String, Object>> UserRegistration(@Valid @RequestBody RegisterRequestDTO registerRequestDTO) { //need to return a responseEntity incase of errors.
+        RegisterResponseDTO registerResponseDTO  = authService.registerUser(registerRequestDTO);
+        return new ResponseEntity<>(Map.of("message","User registered successfully!","user", registerResponseDTO), HttpStatus.OK);
     }
 
     @PostMapping("/login")

@@ -50,13 +50,13 @@ public class TransactionService {
         Account account = accountRepository.findByAccountNumber(accountNumber).orElseThrow(()->new ResourceNotFoundException("Account doesn't exist!"));
 
         //We also have to check the corresponding account belongs to the respective user
-        if(!(user.getId()==(account.getUser().getId())))
+        if(!(user.getId().equals(account.getUser().getId())))
             throw new AccessForbiddenException("UnAuthorized access!");
 
         if(account.getStatus()!=AccountStatus.ACTIVE){
             throw new AccountInactiveException("Account is "+ account.getStatus());
         }
-            Transaction transaction = new Transaction(TransactionType.CREDIT,amount,description,LocalDateTime.now(),account);
+            Transaction transaction = new Transaction(null, TransactionType.CREDIT,amount,description,LocalDateTime.now(),account);
 //            transaction.setTransactionType();
 //            transaction.setAmount();
 //            transaction.setDescription();
@@ -75,7 +75,7 @@ public class TransactionService {
         Account account = accountRepository.findByAccountNumber(accountNumber).orElseThrow(()->new ResourceNotFoundException("Account doesn't exist!"));
 
         //to ensure the account belongs to the respective user
-        if(!(user.getId()==(account.getUser().getId())))
+        if(!(user.getId().equals(account.getUser().getId())))
             throw new AccessForbiddenException("UnAuthorized access!");
 
         if(account.getStatus()!=AccountStatus.ACTIVE){
@@ -88,7 +88,7 @@ public class TransactionService {
         account.setBalance(account.getBalance().subtract(amount));
         accountRepository.save(account);
 
-        Transaction transaction = new Transaction(TransactionType.DEBIT,amount,description,LocalDateTime.now(),account);
+        Transaction transaction = new Transaction(null, TransactionType.DEBIT,amount,description,LocalDateTime.now(),account);
         transactionRepository.save(transaction);
 
         return transactionMapper.entityToDTO(transaction);
@@ -100,7 +100,7 @@ public class TransactionService {
         Account account = accountRepository.findByAccountNumber(accountNumber).orElseThrow(()->new ResourceNotFoundException("Account doesn't exist!"));
 
         //to ensure the account belongs to the respective user
-        if(!(user.getId()==(account.getUser().getId())))
+        if(!(user.getId().equals(account.getUser().getId())))
             throw new AccessForbiddenException("UnAuthorized access!");
 
         List<Transaction> transactionList = transactionRepository.findByAccount(account);
@@ -115,7 +115,7 @@ public class TransactionService {
         Account account = accountRepository.findByAccountNumber(accountNumber).orElseThrow(()->new ResourceNotFoundException("Account doesn't exist!"));
 
         //to ensure the account belongs to the respective user
-        if(!(user.getId()==(account.getUser().getId())))
+        if(!(user.getId().equals(account.getUser().getId())))
             throw new AccessForbiddenException("UnAuthorized access!");
 
         Pageable pageable = PageRequest.of(page,size);
@@ -129,7 +129,7 @@ public class TransactionService {
         Account account = accountRepository.findByAccountNumber(accountNumber).orElseThrow(()->new ResourceNotFoundException("Account doesn't exist!"));
 
         //to ensure the account belongs to the respective user
-        if(!(user.getId()==(account.getUser().getId())))
+        if(!(user.getId().equals(account.getUser().getId())))
             throw new AccessForbiddenException("UnAuthorized access!");
 
         List<Transaction> transactionList = transactionRepository.findByAccountAndTransactionType(account,type);
@@ -158,8 +158,8 @@ public class TransactionService {
         senderAccount.setBalance(senderAccount.getBalance().subtract(amount));//subtract from sender
         receiverAccount.setBalance(receiverAccount.getBalance().add(amount));//add to receiver
 
-        Transaction senderTransaction = new Transaction(TransactionType.DEBIT,amount,description,LocalDateTime.now(),senderAccount);
-        Transaction receiverTransaction = new Transaction(TransactionType.CREDIT,amount,description,LocalDateTime.now(),receiverAccount);
+        Transaction senderTransaction = new Transaction(null,TransactionType.DEBIT,amount,description,LocalDateTime.now(),senderAccount);
+        Transaction receiverTransaction = new Transaction(null,TransactionType.CREDIT,amount,description,LocalDateTime.now(),receiverAccount);
 
         accountRepository.save(senderAccount);
         accountRepository.save(receiverAccount);

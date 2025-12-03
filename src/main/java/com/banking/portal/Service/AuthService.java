@@ -4,6 +4,7 @@ import com.banking.portal.Mapper.UserMapper;
 import com.banking.portal.dto.AuthResponseDTO;
 import com.banking.portal.dto.LoginRequestDTO;
 import com.banking.portal.dto.RegisterRequestDTO;
+import com.banking.portal.dto.RegisterResponseDTO;
 import com.banking.portal.entity.User;
 import com.banking.portal.exception.EmailAlreadyExistsException;
 import com.banking.portal.exception.UsernameAlreadyExistsException;
@@ -43,7 +44,7 @@ public class AuthService {
     }
 
 
-    public User registerUser(RegisterRequestDTO registerRequestDTO){
+    public RegisterResponseDTO registerUser(RegisterRequestDTO registerRequestDTO){
             if(userRepository.existsByUsername(registerRequestDTO.getUsername())){
                 throw new UsernameAlreadyExistsException("Username already exists!");
             }
@@ -54,7 +55,8 @@ public class AuthService {
         User userEntity = userMapper.userDTOtoUser(registerRequestDTO); //converted into a user entity
         //String encodedUserEntity - The userEntity should not contain raw passwords
         userEntity.setPassword(passwordEncoder.encode(registerRequestDTO.getPassword())); //So while mapping password is ignored & set only after encoding
-        return userRepository.save(userEntity); //save method returns back the userEntity
+        User user = userRepository.save(userEntity); //save method returns back the userEntity
+        return userMapper.toDTO(user);
     }
 
     public AuthResponseDTO userLogin(LoginRequestDTO loginRequestDTO){
