@@ -3,7 +3,6 @@ package com.banking.portal.entity;
 import com.banking.portal.enums.AccountStatus;
 import com.banking.portal.enums.AccountType;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

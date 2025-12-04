@@ -65,7 +65,7 @@ public class AccountService {
 
     public @NotNull List<AccountResponseDTO> getUserAccountsByStatus(String username, AccountStatus status) {
         User user = userRepository.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("User doesn't exist!"));
-        List<Account> accountList = accountRepository.findByStatus(status);
+        List<Account> accountList = accountRepository.findByStatusAndUser(status,user);
         return accountList.stream()
                 .map(accountMapper::accountToAccountResponseDTO)
                 .toList();

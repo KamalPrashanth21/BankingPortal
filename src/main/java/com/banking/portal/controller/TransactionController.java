@@ -8,6 +8,7 @@ import com.banking.portal.dto.TransferResponseDTO;
 import com.banking.portal.enums.TransactionType;
 import com.banking.portal.security.CustomUserDetails;
 import org.jetbrains.annotations.NotNull;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,14 +29,14 @@ import java.util.Map;
     }
 
     @PostMapping("/deposit")
-    public ResponseEntity<@NotNull TransactionResponseDTO> deposit(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody TransactionRequestDTO transactionRequestDTO){
+    public ResponseEntity<@NotNull TransactionResponseDTO> deposit(@AuthenticationPrincipal CustomUserDetails userDetails, @Valid @RequestBody TransactionRequestDTO transactionRequestDTO){
         TransactionResponseDTO transactionResponseDTO = transactionService.deposit(userDetails.getUsername(), transactionRequestDTO.getAccountNumber(), transactionRequestDTO.getAmount(), transactionRequestDTO.getDescription());
         return new ResponseEntity<>(transactionResponseDTO, HttpStatus.OK);
     }
 
 
     @PostMapping("/withdraw")
-    public ResponseEntity<@NotNull TransactionResponseDTO> withdraw(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody TransactionRequestDTO transactionRequestDTO){
+    public ResponseEntity<@NotNull TransactionResponseDTO> withdraw(@AuthenticationPrincipal CustomUserDetails userDetails, @Valid @RequestBody TransactionRequestDTO transactionRequestDTO){
         TransactionResponseDTO transactionResponseDTO = transactionService.withdraw(userDetails.getUsername(), transactionRequestDTO.getAccountNumber(),transactionRequestDTO.getAmount(),transactionRequestDTO.getDescription()); //getId() would not be null since only the authenticated object that exists can make an api call.
         return new ResponseEntity<>(transactionResponseDTO,HttpStatus.OK);
     }
@@ -59,7 +60,7 @@ import java.util.Map;
     }
 
     @PostMapping("/transfer")
-    public ResponseEntity<@NotNull Map<String,Object>> transfer(@AuthenticationPrincipal CustomUserDetails userDetails, @RequestBody TransferRequestDTO transferRequestDTO){
+    public ResponseEntity<@NotNull Map<String,Object>> transfer(@AuthenticationPrincipal CustomUserDetails userDetails, @Valid @RequestBody TransferRequestDTO transferRequestDTO){
         TransferResponseDTO transferResponseDTO = transactionService.transfer(userDetails.getUsername(), transferRequestDTO.getFromAccountNumber(),transferRequestDTO.getToAccountNumber(),transferRequestDTO.getAmount(),transferRequestDTO.getDescription());
         return new ResponseEntity<>(Map.of("message","Congrats! Your fund transfer transaction is successful! ","transaction",transferResponseDTO),HttpStatus.OK);
     }

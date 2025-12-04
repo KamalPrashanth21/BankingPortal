@@ -1,17 +1,24 @@
 package com.banking.portal.exception;
 
 import com.banking.portal.dto.ErrorResponseDTO;
+import com.banking.portal.dto.ValidationErrorResponseDTO;
 import jakarta.servlet.http.HttpServletRequest;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.FieldError;
 
 import java.time.LocalDateTime;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
@@ -60,8 +67,23 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<@NotNull ErrorResponseDTO> generalException(Exception ex, HttpServletRequest http){
+        log.error("Unhandled exception on {}: {}", http.getRequestURI(), ex.getMessage(), ex);
         ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO("INTERNAL_SERVER_ERROR", ex.getMessage(), http.getRequestURI(), LocalDateTime.now());
         return new ResponseEntity<>(errorResponseDTO,HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<@NotNull ValidationErrorResponseDTO> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpServletRequest request){
+        Map<String, String> fieldErrors = ex.getBindingResult() //.getBindingResult() returns the list of objects that has fieldErrors
+                .getFieldErrors()
+                .stream()
+                .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage, (first, second) -> first));
+
+        ValidationErrorResponseDTO validationErrorResponseDTO = new ValidationErrorResponseDTO("VALIDATION_ERROR", "Invalid request data", request.getRequestURI(), LocalDateTime.now(), fieldErrors);
+        log.warn("Validation failed for request {}: {}", request.getRequestURI(), fieldErrors);
+        return new ResponseEntity<>(validationErrorResponseDTO, HttpStatus.BAD_REQUEST);
+    }
+
     }
 
 
@@ -70,4 +92,3 @@ public class GlobalExceptionHandler {
 //        ErrorResponseDTO errorResponseDTO = new ErrorResponseDTO("USER_NOT_FOUND", "The user doesn't exist!", http.getRequestURI(), LocalDateTime.now());
 //        return new ResponseEntity<>(errorResponseDTO,HttpStatus.NOT_FOUND);
 //    }
-}

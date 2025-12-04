@@ -16,7 +16,7 @@ import java.util.Optional;
 public interface AccountRepository extends JpaRepository<@NotNull Account, @NotNull Long> {
         Optional<Account> findByAccountNumber(String accountNumber);
         List<Account> findByUser(User user);
-        List<Account> findByStatus(AccountStatus status);
+        List<Account> findByStatusAndUser(AccountStatus status, User user);
         Page<@NotNull Account> findByUser(User user, Pageable pageable);
 
 }

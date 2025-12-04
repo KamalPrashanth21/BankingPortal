@@ -1,6 +1,4 @@
 package com.banking.portal.dto;
-
-import com.banking.portal.entity.Account;
 import com.banking.portal.enums.TransactionType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,5 +23,5 @@ public class TransactionResponseDTO {
     @NonNull
     LocalDateTime timestamp;
     @NonNull
-    Account account;
+    String accountNumber;
 }
