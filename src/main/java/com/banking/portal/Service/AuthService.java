@@ -1,6 +1,7 @@
 package com.banking.portal.Service;
 
 import com.banking.portal.Mapper.UserMapper;
+import com.banking.portal.annotations.AuditUserCreation;
 import com.banking.portal.dto.AuthResponseDTO;
 import com.banking.portal.dto.LoginRequestDTO;
 import com.banking.portal.dto.RegisterRequestDTO;
@@ -43,7 +44,7 @@ public class AuthService {
         this.jwtUtil=jwtUtil;
     }
 
-
+    @AuditUserCreation
     public RegisterResponseDTO registerUser(RegisterRequestDTO registerRequestDTO){
             if(userRepository.existsByUsername(registerRequestDTO.getUsername())){
                 throw new UsernameAlreadyExistsException("Username already exists!");

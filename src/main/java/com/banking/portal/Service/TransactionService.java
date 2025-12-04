@@ -1,6 +1,7 @@
 package com.banking.portal.Service;
 
 import com.banking.portal.Mapper.TransactionMapper;
+import com.banking.portal.annotations.AuditFundTransfer;
 import com.banking.portal.dto.TransactionResponseDTO;
 import com.banking.portal.dto.TransferResponseDTO;
 import com.banking.portal.entity.Account;
@@ -138,6 +139,7 @@ public class TransactionService {
                 .toList();
     }
 
+    @AuditFundTransfer
     public TransferResponseDTO transfer(String username, String fromAccountNumber, String toAccountNumber,BigDecimal amount, String description){
 
         User user = userRepository.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("User doesn't exist"));
