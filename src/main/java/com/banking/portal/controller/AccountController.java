@@ -1,7 +1,6 @@
 package com.banking.portal.controller;
 
-
-import com.banking.portal.Service.AccountService;
+import com.banking.portal.Service.impl.AccountServiceImpl;
 import com.banking.portal.dto.AccountResponseDTO;
 import com.banking.portal.enums.AccountStatus;
 import com.banking.portal.security.CustomUserDetails;
@@ -9,20 +8,18 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/accounts")
 public class AccountController {
 
-    private final AccountService accountService;
+    private final AccountServiceImpl accountService;
 
-    public AccountController(AccountService accountService){
+    public AccountController(AccountServiceImpl accountService){
         this.accountService = accountService;
     }
 

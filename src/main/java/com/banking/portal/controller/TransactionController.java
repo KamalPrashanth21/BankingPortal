@@ -1,6 +1,6 @@
 package com.banking.portal.controller;
 
-import com.banking.portal.Service.TransactionService;
+import com.banking.portal.Service.impl.TransactionServiceImpl;
 import com.banking.portal.dto.TransactionRequestDTO;
 import com.banking.portal.dto.TransactionResponseDTO;
 import com.banking.portal.dto.TransferRequestDTO;
@@ -22,9 +22,9 @@ import java.util.Map;
 @RequestMapping("/api/transactions")
     public class TransactionController {
 
-    private final TransactionService transactionService;
+    private final TransactionServiceImpl transactionService;
 
-    public TransactionController(TransactionService transactionService){
+    public TransactionController(TransactionServiceImpl transactionService){
         this.transactionService=transactionService;
     }
 

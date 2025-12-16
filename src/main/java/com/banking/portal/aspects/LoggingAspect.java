@@ -28,7 +28,7 @@ public class LoggingAspect {
 
     }
 
-    @Around("@annotation(com.banking.portal.annotations.AuditUserCreation)") //this audits/tracks the fund transfer method
+    @Around("@annotation(com.banking.portal.annotations.AuditFundTransfer)") //this audits/tracks the fund transfer method
     public Object logFundTransfer(ProceedingJoinPoint joinPoint, AuditFundTransfer auditFundTransfer) throws Throwable {
         log.info("Fund Transfer started - Passed Arguments : {}", joinPoint.getArgs());
 
